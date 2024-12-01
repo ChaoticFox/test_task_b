@@ -27,7 +27,7 @@ public class TravelPoliceTest extends BaseTest {
     @Test
     public void travelPolicePositive(){
         //Pārvietoties uz ceļojuma polišu iegādes formu
-        MainPage mainPage = new MainPage();
+        MainPage mainPage = new MainPage(translationHelper);
         mainPage.clickMenuOption(translationHelper.getTranslation("police.option.travel"));
         assertTrue(isPageOpened("https://www.bta.lv/privatpersonam/celojuma-apdrosinasana"));
         TravelPolice travelPolice = new TravelPolice(translationHelper);
