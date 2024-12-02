@@ -20,8 +20,9 @@ public class TravelPolice extends BasePage {
         super(translationHelper);
     }
     public void setCustomDestination(String destination){
-        assertTrue($(".country-button-add").isDisplayed());
-        $(".country-button-add").shouldBe(visible).click();
+        $("#regionalSelectorRegion-open").click();
+        $("#regionalSelectorCountry-showListSearch").shouldBe(visible).click();
+        $(".add-text").shouldBe(visible).click();
         $("#regionalSelectorCountry-typedValue").shouldBe(visible).setValue(destination);
         $("[data-value=\""+destination+"\"]").shouldBe(visible).click();
         $("#regionalSelectorCountry-removeCountry-0").shouldBe(visible);
@@ -34,7 +35,7 @@ public class TravelPolice extends BasePage {
     }
 
     public void setActivity(String activity){
-        $("#travelActivities-open").shouldBe(visible).click();
+        $("#travelActivities-open").scrollTo().shouldBe(visible).click();
         $(byText(activity)).shouldBe(visible).click();
     }
 
@@ -43,7 +44,7 @@ public class TravelPolice extends BasePage {
     }
 
     public void goToStep2(){
-        $("[data-type=\"travelSubmit\"]").click();
+        $("[data-type=\"travelSubmit\"]").scrollTo().shouldBe(visible).click();
         currentStepCorrect(translationHelper.getTranslation("police.step2"));
     }
 
@@ -52,28 +53,38 @@ public class TravelPolice extends BasePage {
     }
 
     public String selectPlanSavePrice(String plan){
-        String price = $("[data-type=\"policyItemPlan"+plan+"\"]").getText();
-        $("[data-type=\"selectPolicyPlan"+plan+"\"]").click();
+        String price = $("[data-type=\"policyItemPrice"+plan+"\"]").getText();
+        $("[datatype=\"selectPolicyPlan"+plan+"\"]").scrollTo().shouldBe(visible);
+        runJS("arguments[0].click();",$("[datatype=\"selectPolicyPlan"+plan+"\"]") );
         currentStepCorrect(translationHelper.getTranslation("police.step3"));
         return price;
     }
 
     public void extraOptionsDisplayed(Map<String, String> expectedPlans){
         //logic to check if all selected insurance plans applied
-        $("#form-travel-additional").shouldBe(visible);
-        Map<String, String> actualPlans = new HashMap<>();
+        $("#insurance-plan-widget").shouldBe(visible);
+        // Iterate through expected plans and check their presence and counts
         for (Map.Entry<String, String> entry : expectedPlans.entrySet()) {
             String planName = entry.getKey();
             String planPrice = entry.getValue();
-            boolean planNameDisplayed= $$(".item-name").findBy(text(planName)).isDisplayed();
-            boolean planPriceDisplayed= $$(".item-value").findBy(text(planPrice)).isDisplayed();
-            if (planNameDisplayed && planPriceDisplayed) {
-                actualPlans.put(planName, planPrice);
+            // Check that each plan name and price are displayed exactly once
+            int planNameCount = $$(".item-name").filter(text(planName)).size();
+            int planPriceCount = $$(".item-value").filter(text(planPrice)).size();
+            if (planNameCount != 1) {
+                throw new AssertionError("Plan name '" + planName + "' is displayed " + planNameCount + " times.");
             }
-        }
-        if (!actualPlans.equals(expectedPlans)) {
-            throw new AssertionError("Displayed plans do not match the expected plans.");
-        }
+            if (planPriceCount != 1) {
+                throw new AssertionError("Plan price '" + planPrice + "' is displayed " + planPriceCount + " times.");
+            }
+        } // Additional check to ensure no extra elements are present
+       int totalPlanNamesCount = $$(".item-name").size();
+       int totalPlanPricesCount = $$(".item-value").size();
+
+       if (totalPlanNamesCount != expectedPlans.size() || totalPlanPricesCount != expectedPlans.size()) {
+           throw new AssertionError("Number of displayed plans does not match the expected count. Expected: "
+                   + expectedPlans.size() + ", but got names: " + totalPlanNamesCount
+                   + " and prices: " + totalPlanPricesCount);
+       }
 
     }
 
@@ -91,7 +102,7 @@ public class TravelPolice extends BasePage {
     public String saveRentalCarInsurance(String sum){
         $(".confirm-details").click();
         $(".rental-car-security").shouldNotBe(visible);
-        $$(".option-detail").findBy(text(translationHelper.getTranslation("police.car.ownrisk")+sum)).shouldBe(visible);
+        $$(".option-detail").findBy(text(translationHelper.getTranslation("police.car.ownrisk")+" "+sum)).shouldBe(visible);
         return convertAmountToPrice($(".amount").getText());
     }
 
@@ -107,9 +118,9 @@ public class TravelPolice extends BasePage {
     public void travellerFieldsInitialState(List<InsuredPerson> travellers){
         for(int i=0; i<travellers.size(); i++){
             if(travellers.get(i).getIsResident()){
-                $("travelerFirstName0").shouldBe(visible).shouldHave(attribute("data-store-value",""));
-                $("travelerLastName0").shouldBe(visible).shouldHave(attribute("data-store-value",""));
-                $("travelerIdentityNumber0").shouldBe(visible).shouldHave(attribute("data-store-value",""));
+                $("#travelerFirstName0").shouldBe(visible).shouldHave(attribute("data-store-value",""));
+                $("#travelerLastName0").shouldBe(visible).shouldHave(attribute("data-store-value",""));
+                $("#travelerIdentityNumber0").shouldBe(visible).shouldHave(attribute("data-store-value",""));
             }else{
                 //check for more fields, out of scope
             }
