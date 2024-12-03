@@ -1,9 +1,11 @@
 package base;
+
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 
 public abstract class BasePage {
     protected TranslationHelper translationHelper;
-    public BasePage(TranslationHelper translationHelper){
+
+    public BasePage(TranslationHelper translationHelper) {
         this.translationHelper = translationHelper;
     }
 

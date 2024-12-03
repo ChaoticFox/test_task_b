@@ -1,18 +1,20 @@
 package base;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class TranslationHelper {
-    private Properties properties;
+    private final Properties properties;
 
-    public TranslationHelper(String languageCode){
+    public TranslationHelper(String languageCode) {
         properties = new Properties();
-        String fileName = "config/strings_"+languageCode+".properties";
+        String fileName = "translations/strings_" + languageCode + ".properties";
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName);
-             InputStreamReader reader = new InputStreamReader(input, "UTF-8")){
-            if (input == null) {
+             InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
+            if (input==null) {
                 throw new RuntimeException("Sorry, unable to find " + fileName);
             }
             properties.load(reader);
@@ -21,7 +23,7 @@ public class TranslationHelper {
         }
     }
 
-    public String getTranslation(String key){
+    public String getTranslation(String key) {
         return properties.getProperty(key);
     }
 

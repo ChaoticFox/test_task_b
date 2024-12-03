@@ -1,36 +1,21 @@
 package testcases;
 
 import base.BaseTest;
-import base.TranslationHelper;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import data.InsuredPerson;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pageobjects.MainPage;
 import pageobjects.TravelPolice;
-
-import java.util.*;
-
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TravelPoliceTest extends BaseTest {
-    //private TranslationHelper translationHelper;
-
-    @BeforeEach
-    public void setup() {
-        //super.setUp();
-    }
 
     @Test
-    public void travelPolicePositive(){
+    public void travelPolicePositive() {
         //Pārvietoties uz ceļojuma polišu iegādes formu
-        MainPage mainPage = new MainPage(translationHelper);
-        mainPage.clickMenuOption(translationHelper.getTranslation("police.option.travel"));
-        assertTrue(isPageOpened("https://www.bta.lv/privatpersonam/celojuma-apdrosinasana"));
         TravelPolice travelPolice = new TravelPolice(translationHelper);
+        travelPolice.clickMenuOption(translationHelper.getTranslation("police.option.travel"));
         List<InsuredPerson> insuredPeople = new ArrayList<>();
         insuredPeople.add(new InsuredPerson(true));
         //Nomainīt ceļojuma galamērķi uz Indija izmantojot “Izvēlies valstis” -> “Pievienot valsti” -> “Meklēt” norādi “Indiju” un nospied “Apstiprināt”

@@ -1,7 +1,7 @@
 package data;
 
 public class InsuredPerson {
-    private boolean isResident;
+    private final boolean isResident;
     private String country;
     private String name;
     private String surname;
@@ -10,18 +10,18 @@ public class InsuredPerson {
     private String birthMonth;
     private int birthYear;
 
-    public InsuredPerson(boolean isResident){
-        this.isResident=isResident;
+    public InsuredPerson(boolean isResident) {
+        this.isResident = isResident;
     }
 
     public InsuredPerson(boolean isResident,
-                     String country,
-                     String name,
-                     String surname,
-                     String identityCode,
-                     int birthDay,
-                     String birthMonth,
-                     int birthYear) {
+                         String country,
+                         String name,
+                         String surname,
+                         String identityCode,
+                         int birthDay,
+                         String birthMonth,
+                         int birthYear) {
         this.isResident = isResident;
         this.country = country;
         this.name = name;
@@ -32,7 +32,7 @@ public class InsuredPerson {
         this.birthYear = birthYear;
     }
 
-    public Boolean getIsResident(){
+    public Boolean getIsResident() {
         return this.isResident;
     }
 }
